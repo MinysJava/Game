@@ -15,20 +15,16 @@ public class ShotGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		img = new Texture("bg2048.jpg");
 		region = new TextureRegion(img, 20, 30, 50, 70);
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(0.855f, 0.810f, 0.811f, 1f);
+		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.setColor(1f, 1f, 1f, 1f);
-		batch.draw(img, 0, 0);
-		batch.setColor(0.5f, 0.9f, 0.3f, 0.3f);
-		batch.draw(region, 300, 300);
-		batch.draw(img, 100, 100, 500, 500);
+		batch.draw(img, 0, 0, 700, 700);
 		batch.end();
 	}
 	
