@@ -23,7 +23,7 @@ public class MenuScreen extends BaseScreen {
 
         pos = new Vector2(304, 224);
         v = new Vector2();
-        target = new Vector2();
+        target = new Vector2(0,0);
 
 
     }
@@ -37,11 +37,13 @@ public class MenuScreen extends BaseScreen {
         batch.draw(img, 0, 0, 640, 480);
         batch.draw(rc, pos.x, pos.y, 32, 32);
         batch.end();
-        if (pos.x == target.x){
+
+        if (pos.x == target.x || pos.x == 0 || pos.x == 608) {
             v.x = 0;
         }
-        if (pos.y == target.y){
+        if (pos.y == target.y || pos.y == 0 || pos.y == 448) {
             v.y = 0;
+
         }
         pos.add(v);
 
@@ -60,13 +62,17 @@ public class MenuScreen extends BaseScreen {
         target.set(screenX - 16, Gdx.graphics.getHeight() - screenY - 16);
 
         if (pos.x < target.x){
+            pos.x = pos.x + 1;
             v.x = 1;
         } else if( pos.x > target.x){
             v.x = -1;
+            pos.x = pos.x - 1;
         }
         if (pos.y < (Gdx.graphics.getHeight() - screenY - 16)){
+            pos.y = pos.y + 1;
             v.y = 1;
         } else if (pos.y > (Gdx.graphics.getHeight() - screenY - 16)){
+            pos.y = pos.y - 1;
             v.y = -1;
         }
 //        pos.set(screenX - 16, Gdx.graphics.getHeight() - screenY - 16); Перемещает объект по координаиам клика мышки
@@ -88,16 +94,30 @@ public class MenuScreen extends BaseScreen {
     public boolean keyDown(int keycode) {
         super.keyDown(keycode);
         if(keycode == 19){
-            v.y = v.y + 2;
+            if (pos.y != 448) {
+                pos.y = pos.y + 1;
+            }
+            v.y = v.y + 1;
+
         }
         if (keycode == 20){
-            v.y = v.y - 2;
+            if (pos.y != 0) {
+                pos.y = pos.y - 1;
+            }
+            v.y = v.y - 1;
+
         }
         if (keycode == 21){
-            v.x = v.x - 2;
+            if (pos.x != 0) {
+                pos.x = pos.x - 1;
+            }
+            v.x = v.x - 1;
         }
         if (keycode == 22){
-            v.x = v.x + 2;
+            if (pos.x != 608) {
+                pos.x = pos.x + 1;
+            }
+            v.x = v.x + 1;
         }
         return false;
     }
@@ -106,16 +126,16 @@ public class MenuScreen extends BaseScreen {
     public boolean keyUp(int keycode) {
          super.keyUp(keycode);
         if(keycode == 19){
-            v.y = v.y - 2;
+            v.y = v.y - 1;
         }
         if (keycode == 20){
-            v.y = v.y + 2;
+            v.y = v.y + 1;
         }
         if (keycode == 21){
-            v.x = v.x + 2;
+            v.x = v.x + 1;
         }
         if (keycode == 22){
-            v.x = v.x - 2;
+            v.x = v.x - 1;
         }
         return false;
     }
