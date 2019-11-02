@@ -10,7 +10,7 @@ import shein.firstgame.base.BaseScreen;
 public class MenuScreen extends BaseScreen {
 
     private Texture img;
-    private Texture redCircle;
+    private Texture rc;
     private Vector2 testV;
 
 
@@ -21,11 +21,19 @@ public class MenuScreen extends BaseScreen {
     public void show() {
         super.show();
         img = new Texture("bg2048.jpg");
-        redCircle = new Texture("redCircle.png");
+        rc = new Texture("redCircle.png");
         testV = new Vector2(1,1);
 
         pos = new Vector2();
         v = new Vector2(2,1);
+        System.out.println(Gdx.graphics.getWidth());
+        System.out.println(rc.getHeight());
+        if (Gdx.graphics.getWidth() > pos.x + rc.getWidth()){
+            System.out.println(1);
+        } else {
+            System.out.println(2);
+        }
+
     }
 
     @Override
@@ -34,9 +42,14 @@ public class MenuScreen extends BaseScreen {
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(img, 0, 0, 700, 700);
-        batch.draw(redCircle, pos.x, pos.y, 30, 30);
+        batch.draw(img, 0, 0, 640, 480);
+        batch.draw(rc, pos.x, pos.y, 32, 32);
         batch.end();
+        if (Gdx.graphics.getWidth() > (pos.x + 32)
+             && Gdx.graphics.getHeight() > (pos.y + 32)) {
+            pos.add(v);
+        }
+
     }
 
     @Override
@@ -49,8 +62,8 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         super.touchDown(screenX, screenY, pointer, button);
-        testV.add(testV);
-        System.out.println(testV);
+        System.out.println(screenX + "; " + (Gdx.graphics.getHeight() - screenY));
+
 
         return false;
     }
