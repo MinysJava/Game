@@ -13,6 +13,7 @@ public class MenuScreen extends BaseScreen {
     private Texture rc;
     private Vector2 pos;
     private Vector2 v;
+    private Vector2 target;
 
     @Override
     public void show() {
@@ -21,13 +22,9 @@ public class MenuScreen extends BaseScreen {
         rc = new Texture("redCircle.png");
 
         pos = new Vector2(304, 224);
-        v = new Vector2(0,0);
+        v = new Vector2();
+        target = new Vector2();
 
-        if (Gdx.graphics.getWidth() > pos.x + rc.getWidth()){
-            System.out.println(1);
-        } else {
-            System.out.println(2);
-        }
 
     }
 
@@ -40,6 +37,12 @@ public class MenuScreen extends BaseScreen {
         batch.draw(img, 0, 0, 640, 480);
         batch.draw(rc, pos.x, pos.y, 32, 32);
         batch.end();
+        if (pos.x == target.x){
+            v.x = 0;
+        }
+        if (pos.y == target.y){
+            v.y = 0;
+        }
         pos.add(v);
 
     }
@@ -54,7 +57,28 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         super.touchDown(screenX, screenY, pointer, button);
-        System.out.println(screenX + "; " + (Gdx.graphics.getHeight() - screenY));
+        target.set(screenX - 16, Gdx.graphics.getHeight() - screenY - 16);
+
+        if (pos.x < target.x){
+            v.x = 1;
+        } else if( pos.x > target.x){
+            v.x = -1;
+        }
+        if (pos.y < (Gdx.graphics.getHeight() - screenY - 16)){
+            v.y = 1;
+        } else if (pos.y > (Gdx.graphics.getHeight() - screenY - 16)){
+            v.y = -1;
+        }
+//        pos.set(screenX - 16, Gdx.graphics.getHeight() - screenY - 16); Перемещает объект по координаиам клика мышки
+
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        super.touchDragged(screenX, screenY, pointer);
+        pos.set(screenX - 16, Gdx.graphics.getHeight() - screenY - 16);
+        v.set(0,0);
 
 
         return false;
