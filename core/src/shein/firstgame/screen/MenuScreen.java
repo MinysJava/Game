@@ -11,9 +11,6 @@ public class MenuScreen extends BaseScreen {
 
     private Texture img;
     private Texture rc;
-    private Vector2 testV;
-
-
     private Vector2 pos;
     private Vector2 v;
 
@@ -22,12 +19,10 @@ public class MenuScreen extends BaseScreen {
         super.show();
         img = new Texture("bg2048.jpg");
         rc = new Texture("redCircle.png");
-        testV = new Vector2(1,1);
 
-        pos = new Vector2();
-        v = new Vector2(2,1);
-        System.out.println(Gdx.graphics.getWidth());
-        System.out.println(rc.getHeight());
+        pos = new Vector2(304, 224);
+        v = new Vector2(0,0);
+
         if (Gdx.graphics.getWidth() > pos.x + rc.getWidth()){
             System.out.println(1);
         } else {
@@ -45,10 +40,7 @@ public class MenuScreen extends BaseScreen {
         batch.draw(img, 0, 0, 640, 480);
         batch.draw(rc, pos.x, pos.y, 32, 32);
         batch.end();
-        if (Gdx.graphics.getWidth() > (pos.x + 32)
-             && Gdx.graphics.getHeight() > (pos.y + 32)) {
-            pos.add(v);
-        }
+        pos.add(v);
 
     }
 
@@ -65,6 +57,42 @@ public class MenuScreen extends BaseScreen {
         System.out.println(screenX + "; " + (Gdx.graphics.getHeight() - screenY));
 
 
+        return false;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        super.keyDown(keycode);
+        if(keycode == 19){
+            v.y = v.y + 2;
+        }
+        if (keycode == 20){
+            v.y = v.y - 2;
+        }
+        if (keycode == 21){
+            v.x = v.x - 2;
+        }
+        if (keycode == 22){
+            v.x = v.x + 2;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+         super.keyUp(keycode);
+        if(keycode == 19){
+            v.y = v.y - 2;
+        }
+        if (keycode == 20){
+            v.y = v.y + 2;
+        }
+        if (keycode == 21){
+            v.x = v.x + 2;
+        }
+        if (keycode == 22){
+            v.x = v.x - 2;
+        }
         return false;
     }
 }
