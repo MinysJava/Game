@@ -58,6 +58,21 @@ public class Sprite extends Rect {
         return false;
     }
 
+    public boolean touchDragged(Vector2 target, int pointer) {
+        System.out.println("touchDragged, targetX = " + target.x + " targetY = " + target.y);
+        return false;
+    }
+
+    public boolean keyDown(int keycode) {
+        System.out.println("Sprite - key down, keycode = " + keycode);
+        return false;
+    }
+
+    public boolean keyUp(int keycode) {
+        System.out.println("sprite - key up, keycode = " + keycode);
+        return false;
+    }
+
     public float getAngle() {
         return angle;
     }

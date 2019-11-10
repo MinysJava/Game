@@ -16,7 +16,7 @@ public class MenuScreen extends BaseScreen {
     private Texture img;
     private Texture rc;
     private Backgroung bg;
-    private Logo radc;
+    private Logo logo;
 
 
     @Override
@@ -25,8 +25,8 @@ public class MenuScreen extends BaseScreen {
         img = new Texture("bg2048.jpg");
         rc = new Texture("redCircle.png");
         bg = new Backgroung(new TextureRegion(img));
-        radc = new Logo(new TextureRegion(rc));
-        radc.setHeightProportion(0.1f);
+        logo = new Logo(new TextureRegion(rc));
+        logo.setHeightProportion(0.1f);
     }
 
     @Override
@@ -36,8 +36,8 @@ public class MenuScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         bg.draw(batch);
-        radc.draw(batch);
-        radc.update(1);
+        logo.draw(batch);
+        logo.update(1);
         batch.end();
 
     }
@@ -58,10 +58,25 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 target, int pointer) {
         System.out.println("MenuScreen - touchDown, targetX = " + target.x + " targetY = " + target.y);
-        radc.touchDown(target, pointer);
-
+        logo.touchDown(target, pointer);
         return false;
     }
 
+    @Override
+    public boolean touchDragged(Vector2 target, int pointer) {
+        logo.touchDragged(target, pointer);
+        return false;
+    }
 
+    @Override
+    public boolean keyDown(int keycode) {
+        logo.keyDown(keycode);
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        logo.keyUp(keycode);
+        return false;
+    }
 }
