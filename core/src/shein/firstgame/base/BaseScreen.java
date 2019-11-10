@@ -114,29 +114,28 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("touchDown, screenX = " + screenX + " screenY = " + screenY);
+        System.out.println("Base - touchDown, screenX = " + screenX + " screenY = " + screenY);
         target.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
         touchDown(target, pointer);
         return false;
     }
 
     public boolean touchDown(Vector2 target, int pointer) {
-        System.out.println("touchDown, targetX = " + target.x + " targetY = " + target.y);
+        System.out.println("Base - touchDown, targetX = " + target.x + " targetY = " + target.y);
 
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        System.out.println("touchUP, screenX = " + screenX + " screenY = " + screenY);
+        System.out.println("Base - touchUP, screenX = " + screenX + " screenY = " + screenY);
         target.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
         touchUp(target, pointer);
         return false;
     }
 
     public boolean touchUp(Vector2 target, int pointer) {
-        System.out.println("touchUP, targetX = " + target.x + " targetY = " + target.y);
-
+        System.out.println("Base - touchUP, targetX = " + target.x + " targetY = " + target.y);
         return false;
     }
 
@@ -152,8 +151,6 @@ public class BaseScreen implements Screen, InputProcessor {
         System.out.println("touchDragged, targetX = " + target.x + " targetY = " + target.y);
         return false;
     }
-
-
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {

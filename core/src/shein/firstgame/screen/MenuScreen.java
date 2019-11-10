@@ -36,8 +36,8 @@ public class MenuScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         bg.draw(batch);
-        bg.draw(batch);
         radc.draw(batch);
+        radc.update(1);
         batch.end();
 
     }
@@ -57,16 +57,11 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 target, int pointer) {
+        System.out.println("MenuScreen - touchDown, targetX = " + target.x + " targetY = " + target.y);
+        radc.touchDown(target, pointer);
+
         return false;
     }
 
-    @Override
-    public boolean touchUp(Vector2 target, int pointer) {
-        return false;
-    }
 
-    @Override
-    public boolean touchDragged(Vector2 target, int pointer) {
-        return false;
-    }
 }

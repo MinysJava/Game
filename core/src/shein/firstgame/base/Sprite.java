@@ -25,7 +25,6 @@ public class Sprite extends Rect {
         batch.draw(
                 regions[frame],
                 getLeft(), getBottom(),
-//                pos.x, pos.y,
                 halfWidth, halfHeight,
                 getWidth(), getHeight(),
                 scale, scale,
@@ -48,13 +47,13 @@ public class Sprite extends Rect {
     }
 
     public boolean touchDown(Vector2 target, int pointer) {
-        System.out.println("touchDown, targetX = " + target.x + " targetY = " + target.y);
+        System.out.println("Sprite - touchDown, targetX = " + target.x + " targetY = " + target.y);
 
         return false;
     }
 
     public boolean touchUp(Vector2 target, int pointer) {
-        System.out.println("touchUP, targetX = " + target.x + " targetY = " + target.y);
+        System.out.println("Sprite - touchUP, targetX = " + target.x + " targetY = " + target.y);
 
         return false;
     }
