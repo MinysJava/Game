@@ -9,11 +9,14 @@ import shein.firstgame.base.BaseScreen;
 
 public class MenuScreen extends BaseScreen {
 
+    private static final float V_LEN = 2f;
+
     private Texture img;
     private Texture rc;
     private Vector2 pos;
     private Vector2 v;
     private Vector2 target;
+    private Vector2 buff;
 
     @Override
     public void show() {
@@ -24,6 +27,7 @@ public class MenuScreen extends BaseScreen {
         pos = new Vector2(304, 224);
         v = new Vector2();
         target = new Vector2(-15, -15);
+        buff = new Vector2();
     }
 
     @Override
@@ -35,14 +39,20 @@ public class MenuScreen extends BaseScreen {
         batch.draw(img, 0, 0, 640, 480);
         batch.draw(rc, pos.x, pos.y, 32, 32);
         batch.end();
+        buff.set(target);
 
-        if (pos.x == target.x || pos.x == -15 || pos.x == 623) {
+        if (pos.x == target.x || pos.x <= -15 || pos.x >= 623) {
             v.x = 0;
         }
-        if (pos.y == target.y || pos.y == -15 || pos.y == 463) {
+        if (pos.y == target.y || pos.y <= -15 || pos.y >= 463) {
             v.y = 0;
         }
-        pos.add(v);
+        if (buff.sub(pos).len() > V_LEN){
+            pos.add(v);
+        } else {
+            pos.set(target);
+        }
+
     }
 
     @Override
@@ -57,20 +67,8 @@ public class MenuScreen extends BaseScreen {
         super.touchDown(screenX, screenY, pointer, button);
         target.set(screenX - 16, Gdx.graphics.getHeight() - screenY - 16);
 
-        if (pos.x < target.x){
-            pos.x = pos.x + 1;
-            v.x = 1;
-        } else if( pos.x > target.x){
-            v.x = -1;
-            pos.x = pos.x - 1;
-        }
-        if (pos.y < target.y){
-            pos.y = pos.y + 1;
-            v.y = 1;
-        } else if (pos.y > target.y){
-            pos.y = pos.y - 1;
-            v.y = -1;
-        }
+        v.set(target.cpy().sub(pos)).setLength(V_LEN);
+
         return false;
     }
 
