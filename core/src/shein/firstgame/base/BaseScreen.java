@@ -70,28 +70,22 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void pause() {
-        System.out.println("pause");
 
     }
 
     @Override
     public void resume() {
-        System.out.println("resume");
 
     }
 
     @Override
     public void hide() {
-        System.out.println("hide");
         dispose();
-
     }
 
     @Override
     public void dispose() {
-        System.out.println("dispose");
         batch.dispose();
-
     }
 
     @Override
@@ -114,54 +108,44 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        System.out.println("Base - touchDown, screenX = " + screenX + " screenY = " + screenY);
         target.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
         touchDown(target, pointer);
         return false;
     }
 
     public boolean touchDown(Vector2 target, int pointer) {
-        System.out.println("Base - touchDown, targetX = " + target.x + " targetY = " + target.y);
-
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        System.out.println("Base - touchUP, screenX = " + screenX + " screenY = " + screenY);
         target.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
         touchUp(target, pointer);
         return false;
     }
 
     public boolean touchUp(Vector2 target, int pointer) {
-        System.out.println("Base - touchUP, targetX = " + target.x + " targetY = " + target.y);
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        System.out.println("touchDragged, screenX = " + screenX + " screenY = " + screenY);
         target.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
         touchDragged(target, pointer);
         return false;
     }
 
     public boolean touchDragged(Vector2 target, int pointer) {
-        System.out.println("touchDragged, targetX = " + target.x + " targetY = " + target.y);
         return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-
         return false;
     }
 
     @Override
     public boolean scrolled(int amount) {
-        System.out.println("scrolled, amount = " + amount);
-
         return false;
     }
 }

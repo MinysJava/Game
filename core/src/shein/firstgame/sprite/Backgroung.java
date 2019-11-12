@@ -22,7 +22,6 @@ public class Backgroung extends Sprite {
 
     @Override
     public boolean touchDown(Vector2 target, int pointer) {
-        System.out.println("Background");
         return false;
     }
 }

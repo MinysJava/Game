@@ -1,6 +1,5 @@
 package shein.firstgame.sprite;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -34,16 +33,13 @@ public class Logo extends Sprite {
 
     @Override
     public boolean touchDown(Vector2 target, int pointer) {
-        touch.set(target.x - getHalfWidth(), target.y - getHalfHeight());
+        touch.set(target);
         v.set(touch.cpy().sub(pos)).setLength(V_LEN);
-        System.out.println((getLeft() + getHalfWidth()));
-
         return false;
     }
 
     @Override
     public boolean touchDragged(Vector2 target, int pointer) {
-
         pos.set(target.x - getHalfWidth(), target.y - getHalfHeight());
         v.set(0,0);
         return false;
@@ -83,16 +79,4 @@ public class Logo extends Sprite {
 //        }
 //        return false;
 //    }
-
-    @Override
-    public void draw(SpriteBatch batch) {
-        batch.draw(
-                regions[frame],
-                pos.x, pos.y,
-                halfWidth, halfHeight,
-                getWidth(), getHeight(),
-                scale, scale,
-                angle
-        );
-    }
 }
