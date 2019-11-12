@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import shein.firstgame.base.BaseScreen;
 import shein.firstgame.math.Rect;
 import shein.firstgame.sprite.Backgroung;
+import shein.firstgame.sprite.Star;
 
 
 public class GameScreen extends BaseScreen {
@@ -17,6 +18,8 @@ public class GameScreen extends BaseScreen {
     private Texture img;
     private TextureAtlas atlas;
     private Backgroung bg;
+    private Star[] stars;
+    private int STAR_COUNT = 50;
 
     @Override
     public void show() {
@@ -24,6 +27,10 @@ public class GameScreen extends BaseScreen {
         img = new Texture("textures/bg.png");
         bg = new Backgroung(new TextureRegion(img));
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
+        stars = new Star[STAR_COUNT];
+        for (int i = 0; i < STAR_COUNT; i++) {
+            stars[i] = new Star(atlas);
+        }
     }
 
     @Override
@@ -36,6 +43,9 @@ public class GameScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         bg.resize(worldBounds);
+        for (Star s: stars) {
+            s.resize(worldBounds);
+        }
     }
 
     @Override
@@ -66,6 +76,9 @@ public class GameScreen extends BaseScreen {
     }
 
     private void update (float delta){
+        for (Star s: stars) {
+            s.update(delta);
+        }
 
     }
 
@@ -74,6 +87,9 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         bg.draw(batch);
+        for (Star s: stars) {
+            s.draw(batch);
+        }
 
         batch.end();
     }
