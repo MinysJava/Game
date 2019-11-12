@@ -35,10 +35,8 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        System.out.println("show");
         Gdx.input.setInputProcessor(this);
         this.batch = new SpriteBatch();
-
     }
 
     @Override
@@ -48,7 +46,6 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        System.out.println("resize width = " + width + "height = " + height);
         screenBounds.setSize(width, height);
         screenBounds.setLeft(0);
         screenBounds.setBottom(0);
