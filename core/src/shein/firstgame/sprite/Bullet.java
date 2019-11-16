@@ -1,5 +1,6 @@
 package shein.firstgame.sprite;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -13,6 +14,7 @@ public class Bullet extends Sprite {
     private final Vector2 v = new Vector2();
     private int damage;
     private Sprite owner;
+    private Sound shootSound;
 
     public Bullet() {
         regions = new TextureRegion[1];
@@ -25,7 +27,8 @@ public class Bullet extends Sprite {
             Vector2 v0,
             float height,
             Rect worldBounds,
-            int damage
+            int damage,
+            Sound shootSound
     ){
         this.owner = owner;
         this.regions[0] = region;
@@ -33,7 +36,10 @@ public class Bullet extends Sprite {
         this.v.set(v0);
         this.worldBounds = worldBounds;
         this.damage = damage;
+        this.shootSound = shootSound;
         setHeightProportion(height);
+        shootSound.play(0.1f);
+
     }
 
     public int getDamage() {
@@ -47,6 +53,7 @@ public class Bullet extends Sprite {
     @Override
     public void update(float delta) {
         pos.mulAdd(v, delta);
+
         if (isOutside(worldBounds)){
             destroy();
         }

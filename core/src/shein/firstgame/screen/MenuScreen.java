@@ -2,11 +2,14 @@ package shein.firstgame.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.PriorityQueue;
 
 import shein.firstgame.base.BaseScreen;
 import shein.firstgame.math.Rect;
@@ -27,6 +30,8 @@ public class MenuScreen extends BaseScreen {
     private ButtonExit buttonExit;
     private ButtonPaly buttonPaly;
 
+    private Music musicMenu;
+
     public MenuScreen(Game game) {
         this.game = game;
     }
@@ -37,6 +42,7 @@ public class MenuScreen extends BaseScreen {
         img = new Texture("textures/bg.png");
         bg = new Backgroung(new TextureRegion(img));
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
+        music();
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < STAR_COUNT; i++) {
             stars[i] = new Star(atlas);
@@ -59,6 +65,7 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
         img.dispose();
         atlas.dispose();
+        musicMenu.dispose();
     }
 
     @Override
@@ -122,5 +129,12 @@ public class MenuScreen extends BaseScreen {
     public boolean keyUp(int keycode) {
 
         return false;
+    }
+
+    private void music(){
+        musicMenu = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        musicMenu.setVolume(0.5f);
+        musicMenu.setLooping(true);
+        musicMenu.play();
     }
 }

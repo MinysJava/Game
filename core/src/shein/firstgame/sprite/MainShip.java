@@ -1,6 +1,8 @@
 package shein.firstgame.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -21,6 +23,7 @@ public class MainShip extends Sprite {
     private BulletPool bulletPool;
     private TextureRegion bulletRegion;
     private Vector2 bulletV = new Vector2(0, 0.5f);
+    private Sound shootSound;
 
     private boolean pressedLeft;
     private boolean pressedRight;
@@ -32,6 +35,7 @@ public class MainShip extends Sprite {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
         bulletRegion = atlas.findRegion("bulletMainShip");
+        shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
     }
 
     @Override
@@ -96,6 +100,9 @@ public class MainShip extends Sprite {
                moveLeft();
                pressedLeft = true;
                break;
+           case Input.Keys.UP:
+               shoot();
+               break;
        }
     }
 
@@ -124,11 +131,11 @@ public class MainShip extends Sprite {
     }
 
     private void checkBounds(){
-        if(getLeft() < worldBounds.getLeft()){
+        if(getLeft() < worldBounds.getLeft() - getHalfWidth()){
             pos.set(worldBounds.getLeft(), getBottom() + getHalfHeight());
             v.set(0,0);
         }
-        if (getRight() > worldBounds.getRight()){
+        if (getRight() > worldBounds.getRight() + getHalfWidth()){
             pos.set(worldBounds.getRight(), getBottom() + getHalfHeight());
             v.set(0,0);
         }
@@ -151,6 +158,6 @@ public class MainShip extends Sprite {
 
     private void shoot(){
         Bullet bullet = bulletPool.obtain();
-        bullet.set(this, bulletRegion, pos, bulletV, 0.01f, worldBounds, 1);
+        bullet.set(this, bulletRegion, pos, bulletV, 0.01f, worldBounds, 1, shootSound);
     }
 }
