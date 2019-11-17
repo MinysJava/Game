@@ -41,7 +41,7 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool = new BulletPool();
         mainShip = new MainShip(atlas, bulletPool);
-        enemyShip = new EnemyShip(atlas);
+        enemyShip = new EnemyShip(atlas, bulletPool);
     }
 
     @Override
