@@ -11,6 +11,7 @@ import shein.firstgame.base.BaseScreen;
 import shein.firstgame.math.Rect;
 import shein.firstgame.pool.BulletPool;
 import shein.firstgame.sprite.Backgroung;
+import shein.firstgame.sprite.EnemyShip;
 import shein.firstgame.sprite.Star;
 import shein.firstgame.sprite.MainShip;
 
@@ -23,8 +24,9 @@ public class GameScreen extends BaseScreen {
     private Star[] stars;
     private int STAR_COUNT = 25;
     private MainShip mainShip;
-    private TextureRegion main_ship;
     private BulletPool bulletPool;
+    private EnemyShip enemyShip;
+
 
 
     @Override
@@ -39,6 +41,7 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool = new BulletPool();
         mainShip = new MainShip(atlas, bulletPool);
+        enemyShip = new EnemyShip(atlas);
     }
 
     @Override
@@ -56,6 +59,7 @@ public class GameScreen extends BaseScreen {
             s.resize(worldBounds);
         }
         mainShip.resize(worldBounds);
+        enemyShip.resize(worldBounds);
     }
 
     @Override
@@ -101,6 +105,7 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.update(delta);
         bulletPool.updateActiveSprites(delta);
+        enemyShip.update(delta);
     }
 
     private void freeAllDestroyed(){
@@ -117,6 +122,7 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.draw(batch);
         bulletPool.drawActiveSprites(batch);
+        enemyShip.draw(batch);
         batch.end();
     }
 }
