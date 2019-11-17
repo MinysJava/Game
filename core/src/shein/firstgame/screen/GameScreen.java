@@ -16,7 +16,6 @@ import shein.firstgame.sprite.EnemyShip;
 import shein.firstgame.sprite.Star;
 import shein.firstgame.sprite.MainShip;
 
-
 public class GameScreen extends BaseScreen {
 
     private Texture img;
@@ -29,8 +28,7 @@ public class GameScreen extends BaseScreen {
     private EnemyShipPool enemyShipPool;
     private Rect worldBounds;
     private int i = 0;
-
-
+    private int countEnemy = 0;
 
     @Override
     public void show() {
@@ -45,14 +43,11 @@ public class GameScreen extends BaseScreen {
         bulletPool = new BulletPool();
         mainShip = new MainShip(atlas, bulletPool);
         enemyShipPool = new EnemyShipPool(atlas, bulletPool);
-//        enemy0();
-
     }
 
     @Override
     public void render(float delta) {
         update(delta);
-
         freeAllDestroyed();
         draw();
     }
@@ -66,7 +61,6 @@ public class GameScreen extends BaseScreen {
             s.resize(worldBounds);
         }
         mainShip.resize(worldBounds);
-//        enemyShipPool.resize(worldBounds);
     }
 
     @Override
@@ -113,11 +107,7 @@ public class GameScreen extends BaseScreen {
         mainShip.update(delta);
         bulletPool.updateActiveSprites(delta);
         enemyShipPool.updateActiveSprites(delta);
-        if (i % 60 == 0){
-            enemy0();
-            i++;
-        }
-
+        enemy0();
     }
 
     private void freeAllDestroyed(){
@@ -140,7 +130,13 @@ public class GameScreen extends BaseScreen {
     }
 
     private void enemy0(){
-        EnemyShip enemyShip = enemyShipPool.obtain();
-        enemyShip.set(worldBounds);
+        if (countEnemy < 3) {
+            if (i % 90 == 0) {
+                EnemyShip enemyShip = enemyShipPool.obtain();
+                enemyShip.set(worldBounds);
+                countEnemy++;
+            }
+            i++;
+        }
     }
 }

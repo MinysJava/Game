@@ -3,7 +3,6 @@ package shein.firstgame.pool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import shein.firstgame.base.SpritesPool;
-import shein.firstgame.math.Rect;
 import shein.firstgame.sprite.EnemyShip;
 
 public class EnemyShipPool extends SpritesPool<EnemyShip> {
