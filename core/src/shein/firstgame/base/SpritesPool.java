@@ -1,6 +1,7 @@
 package shein.firstgame.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import java.util.ArrayList;
 import java.util.List;

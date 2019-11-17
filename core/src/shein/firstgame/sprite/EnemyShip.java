@@ -27,15 +27,22 @@ public class EnemyShip extends Sprite {
         this.bulletPool = bulletPool;
         bulletRegion = atlas.findRegion("bulletEnemy");
         shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+
+    }
+
+    public void set( Rect worldBounds){
+        this.worldBounds = worldBounds;
+        setHeightProportion(0.15f);
+        setTop(worldBounds.getTop());
     }
 
     @Override
     public void update(float delta) {
         move();
-        shot();
+        shoot();
     }
 
-    private void shot() {
+    private void shoot() {
         if(!isOutside(worldBounds)) {
             if (i % 90 == 0) {
                 Bullet bullet = bulletPool.obtain();
@@ -56,13 +63,5 @@ public class EnemyShip extends Sprite {
             v.set(0.01f, 0);
             i++;
         }
-    }
-
-    @Override
-    public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
-        this.worldBounds = worldBounds;
-        setHeightProportion(0.10f);
-        setTop(worldBounds.getTop());
     }
 }

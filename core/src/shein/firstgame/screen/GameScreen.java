@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import shein.firstgame.base.BaseScreen;
 import shein.firstgame.math.Rect;
 import shein.firstgame.pool.BulletPool;
+import shein.firstgame.pool.EnemyShipPool;
 import shein.firstgame.sprite.Backgroung;
 import shein.firstgame.sprite.EnemyShip;
 import shein.firstgame.sprite.Star;
@@ -25,7 +26,9 @@ public class GameScreen extends BaseScreen {
     private int STAR_COUNT = 25;
     private MainShip mainShip;
     private BulletPool bulletPool;
-    private EnemyShip enemyShip;
+    private EnemyShipPool enemyShipPool;
+    private Rect worldBounds;
+    private int i = 0;
 
 
 
@@ -41,12 +44,15 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool = new BulletPool();
         mainShip = new MainShip(atlas, bulletPool);
-        enemyShip = new EnemyShip(atlas, bulletPool);
+        enemyShipPool = new EnemyShipPool(atlas, bulletPool);
+//        enemy0();
+
     }
 
     @Override
     public void render(float delta) {
         update(delta);
+
         freeAllDestroyed();
         draw();
     }
@@ -54,12 +60,13 @@ public class GameScreen extends BaseScreen {
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
+        this.worldBounds = worldBounds;
         bg.resize(worldBounds);
         for (Star s: stars) {
             s.resize(worldBounds);
         }
         mainShip.resize(worldBounds);
-        enemyShip.resize(worldBounds);
+//        enemyShipPool.resize(worldBounds);
     }
 
     @Override
@@ -105,11 +112,17 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.update(delta);
         bulletPool.updateActiveSprites(delta);
-        enemyShip.update(delta);
+        enemyShipPool.updateActiveSprites(delta);
+        if (i % 60 == 0){
+            enemy0();
+            i++;
+        }
+
     }
 
     private void freeAllDestroyed(){
         bulletPool.freeAllDestroyedActiveSprite();
+        enemyShipPool.freeAllDestroyedActiveSprite();
     }
 
     private void draw(){
@@ -122,7 +135,12 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.draw(batch);
         bulletPool.drawActiveSprites(batch);
-        enemyShip.draw(batch);
+        enemyShipPool.drawActiveSprites(batch);
         batch.end();
+    }
+
+    private void enemy0(){
+        EnemyShip enemyShip = enemyShipPool.obtain();
+        enemyShip.set(worldBounds);
     }
 }
