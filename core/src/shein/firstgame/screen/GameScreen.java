@@ -70,6 +70,7 @@ public class GameScreen extends BaseScreen {
         img.dispose();
         atlas.dispose();
         gameMusic.dispose();
+        mainShip.dispose();
     }
 
     @Override
