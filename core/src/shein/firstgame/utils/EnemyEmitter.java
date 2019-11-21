@@ -48,7 +48,6 @@ public class EnemyEmitter {
     private Vector2 enemySmallV = new Vector2(0, -0.2f);
     private Vector2 enemyMiddleV = new Vector2(0, -0.03f);
     private Vector2 enemyBigV = new Vector2(0, -0.005f);
-    private Vector2 beginV = new Vector2(0, -1f);
 
     private Sound shootSound;
 
@@ -110,7 +109,6 @@ public class EnemyEmitter {
             }
             enemyShip.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemyShip.getHalfWidth(), worldBounds.getRight() - enemyShip.getHalfWidth());
             enemyShip.setBottom(worldBounds.getTop());
-
         }
     }
 

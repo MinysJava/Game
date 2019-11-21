@@ -19,6 +19,8 @@ public abstract class Ship extends Sprite{
     protected Vector2 bulletV = new Vector2();
     protected Sound shootSound;
 
+    private Vector2 beginV = new Vector2(0, -0.2f);
+
     protected float bulletHeight;
     protected int damage;
     protected int hp;
@@ -44,7 +46,11 @@ public abstract class Ship extends Sprite{
         } else {
             reloadTimer = reloadInterval;
         }
-        pos.mulAdd(v, delta);
+        if(getTop() < worldBounds.getTop()) {
+            pos.mulAdd(v, delta);
+        } else {
+            pos.mulAdd(beginV, delta);
+        }
     }
 
     protected void shoot(){
