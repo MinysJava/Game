@@ -28,6 +28,9 @@ public class MainShip extends Sprite {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
+    protected float reloadInterval = 2f;
+    protected float reloadTimer = 0f;
+
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
@@ -36,8 +39,20 @@ public class MainShip extends Sprite {
 
     @Override
     public void update(float delta) {
+        reloadTimer += delta;
+        if (reloadTimer > reloadInterval) {
+            reloadTimer = 0f;
+            shoot();
+        }
         pos.mulAdd(v, delta);
-        checkBounds();
+        if (getRight() > worldBounds.getRight()) {
+            setRight(worldBounds.getRight());
+            stop();
+        }
+        if (getLeft() < worldBounds.getLeft()) {
+            setLeft(worldBounds.getLeft());
+            stop();
+        }
     }
 
     @Override
@@ -120,17 +135,6 @@ public class MainShip extends Sprite {
                     stop();
                 }
                 break;
-        }
-    }
-
-    private void checkBounds(){
-        if(getLeft() < worldBounds.getLeft()){
-            pos.set(worldBounds.getLeft(), getBottom() + getHalfHeight());
-            v.set(0,0);
-        }
-        if (getRight() > worldBounds.getRight()){
-            pos.set(worldBounds.getRight(), getBottom() + getHalfHeight());
-            v.set(0,0);
         }
     }
 

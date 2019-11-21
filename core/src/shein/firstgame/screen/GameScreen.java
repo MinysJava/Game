@@ -1,6 +1,7 @@
 package shein.firstgame.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -23,8 +24,9 @@ public class GameScreen extends BaseScreen {
     private Star[] stars;
     private int STAR_COUNT = 25;
     private MainShip mainShip;
-    private TextureRegion main_ship;
     private BulletPool bulletPool;
+
+    private Music gameMusic;
 
 
     @Override
@@ -37,6 +39,10 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < STAR_COUNT; i++) {
             stars[i] = new Star(atlas);
         }
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        gameMusic.setVolume(0.7f);
+        gameMusic.setLooping(true);
+        gameMusic.play();
         bulletPool = new BulletPool();
         mainShip = new MainShip(atlas, bulletPool);
     }
@@ -63,6 +69,7 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         img.dispose();
         atlas.dispose();
+        gameMusic.dispose();
     }
 
     @Override
