@@ -2,28 +2,17 @@ package shein.firstgame.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import shein.firstgame.base.Sprite;
+import shein.firstgame.base.Ship;
 import shein.firstgame.math.Rect;
 import shein.firstgame.pool.BulletPool;
 
-public class MainShip extends Sprite {
+public class MainShip extends Ship {
 
     private static final float BOTTOM_MARGIN = 0.03f;
     private static final int INVALID_POINTER = -1;
-
-    private final Vector2 v0 = new Vector2(0.5f, 0);
-    private final Vector2 v = new Vector2();
-
-    private Rect worldBounds;
-    private BulletPool bulletPool;
-    private TextureRegion bulletRegion;
-    private Vector2 bulletV = new Vector2(0, 0.5f);
-    private Sound shootShound;
 
     private boolean pressedLeft;
     private boolean pressedRight;
@@ -31,24 +20,20 @@ public class MainShip extends Sprite {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    protected float reloadInterval = 2f;
-    protected float reloadTimer = 0f;
-
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
         bulletRegion = atlas.findRegion("bulletMainShip");
         shootShound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+        v0.set(0.5f, 0);
+        reloadInterval = 0.5f;
+        bulletHeight = 0.01f;
+        damage = 1;
     }
 
     @Override
     public void update(float delta) {
-        reloadTimer += delta;
-        if (reloadTimer > reloadInterval) {
-            reloadTimer = 0f;
-            shoot();
-        }
-        pos.mulAdd(v, delta);
+        super.update(delta);
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
             stop();
@@ -159,11 +144,5 @@ public class MainShip extends Sprite {
     }
 
     private void action(){
-    }
-
-    private void shoot(){
-        shootShound.play();
-        Bullet bullet = bulletPool.obtain();
-        bullet.set(this, bulletRegion, pos, bulletV, 0.01f, worldBounds, 1);
     }
 }
