@@ -29,7 +29,8 @@ public abstract class Ship extends Sprite{
     protected float reloadInterval = 0f;
     protected float reloadTimer = 0f;
 
-
+    protected float animateInterval = 0.05f;
+    protected float animateTimer = animateInterval;
 
     public Ship() {
     }
@@ -45,6 +46,10 @@ public abstract class Ship extends Sprite{
             reloadTimer = 0f;
             shoot();
         }
+        animateTimer += delta;
+        if (animateTimer > animateInterval) {
+            frame = 0;
+        }
         pos.mulAdd(v, delta);
     }
 
@@ -52,6 +57,19 @@ public abstract class Ship extends Sprite{
     public void destroy() {
         boom();
         super.destroy();
+    }
+
+    public void damage (int damage){
+        hp -= damage;
+        if(hp <= 0){
+            destroy();
+        }
+        animateTimer = 0f;
+        frame = 1;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     protected void shoot(){

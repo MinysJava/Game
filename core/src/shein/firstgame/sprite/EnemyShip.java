@@ -69,4 +69,13 @@ public class EnemyShip extends Ship {
         this.v.set(descentV);
         state = State.DESCENT;
     }
+
+    public boolean isBulletCollisoin(Rect bullet){
+        return !(
+                bullet.getRight() < getLeft()
+                        || bullet.getLeft() > getRight()
+                        || bullet.getBottom() > getTop()
+                        || bullet.getTop() < pos.y
+        );
+    }
 }

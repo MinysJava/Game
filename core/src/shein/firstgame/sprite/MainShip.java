@@ -28,7 +28,7 @@ public class MainShip extends Ship {
         bulletRegion = atlas.findRegion("bulletMainShip");
         shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         v0.set(0.5f, 0);
-        reloadInterval = 0.5f;
+        reloadInterval = 0.2f;
         bulletHeight = 0.01f;
         damage = 1;
         hp = 100;
@@ -131,6 +131,15 @@ public class MainShip extends Ship {
                 }
                 break;
         }
+    }
+
+    public boolean isBulletCollisoin(Rect bullet){
+        return !(
+                bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getTop() < getBottom()
+                || bullet.getBottom() > pos.y
+                );
     }
 
     private void moveRight(){

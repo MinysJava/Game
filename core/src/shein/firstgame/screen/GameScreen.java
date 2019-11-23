@@ -8,12 +8,16 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 import shein.firstgame.base.BaseScreen;
 import shein.firstgame.math.Rect;
 import shein.firstgame.pool.BulletPool;
 import shein.firstgame.pool.EnemyShipPool;
 import shein.firstgame.pool.ExplosionPool;
 import shein.firstgame.sprite.Backgroung;
+import shein.firstgame.sprite.Bullet;
+import shein.firstgame.sprite.EnemyShip;
 import shein.firstgame.sprite.Star;
 import shein.firstgame.sprite.MainShip;
 import shein.firstgame.utils.EnemyEmitter;
@@ -62,6 +66,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         update(delta);
+        checkCollisions();
         freeAllDestroyed();
         draw();
     }
@@ -129,6 +134,37 @@ public class GameScreen extends BaseScreen {
         enemyEmitter.generate(delta);
     }
 
+    private void checkCollisions(){
+        List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
+        List<Bullet> bulletList = bulletPool.getActiveObjects();
+        for (EnemyShip enemyShip: enemyShipList) {
+            float minDistShip = enemyShip.getHalfWidth() + mainShip.getHalfWidth();
+            if(mainShip.pos.dst(enemyShip.pos) < minDistShip){
+                mainShip.damage(enemyShip.getDamage());
+                enemyShip.destroy();
+            }
+            for (Bullet bullet: bulletList) {
+                if(bullet.getOwner() != mainShip){
+                    continue;
+                }
+                if(enemyShip.isBulletCollisoin(bullet)){
+                    enemyShip.damage(bullet.getDamage());
+                    bullet.destroy();
+
+                }
+            }
+        }
+        for (Bullet bullet: bulletList) {
+            if(bullet.getOwner() == mainShip){
+                continue;
+            }
+            if(mainShip.isBulletCollisoin(bullet)){
+                mainShip.damage(bullet.getDamage());
+                bullet.destroy();
+            }
+        }
+    }
+
     private void freeAllDestroyed(){
         bulletPool.freeAllDestroyedActiveSprite();
         enemyShipPool.freeAllDestroyedActiveSprite();
@@ -143,7 +179,9 @@ public class GameScreen extends BaseScreen {
         for (Star s: stars) {
             s.draw(batch);
         }
-        mainShip.draw(batch);
+        if(!mainShip.isDestroyed()) {
+            mainShip.draw(batch);
+        }
         bulletPool.drawActiveSprites(batch);
         enemyShipPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);

@@ -10,21 +10,21 @@ import shein.firstgame.sprite.Explosion;
 public class ExplosionPool extends SpritesPool<Explosion> {
 
     private TextureAtlas atlas;
-    private Sound sound;
+    private Sound soundExp;
 
     public ExplosionPool(TextureAtlas atlas) {
         this.atlas = atlas;
-        sound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
+        soundExp = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
     }
 
     @Override
     protected Explosion newObject() {
-        return new Explosion(atlas, sound);
+        return new Explosion(atlas, soundExp);
     }
 
     @Override
     public void dispose() {
-        sound.dispose();
+        soundExp.dispose();
         super.dispose();
     }
 }
