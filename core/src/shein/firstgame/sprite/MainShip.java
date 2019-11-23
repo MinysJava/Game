@@ -31,7 +31,7 @@ public class MainShip extends Ship {
         reloadInterval = 0.2f;
         bulletHeight = 0.01f;
         damage = 1;
-        hp = 100;
+        hp = 3;
         bulletV.set(0, 0.5f);
     }
 

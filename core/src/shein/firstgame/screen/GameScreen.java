@@ -18,6 +18,7 @@ import shein.firstgame.pool.ExplosionPool;
 import shein.firstgame.sprite.Backgroung;
 import shein.firstgame.sprite.Bullet;
 import shein.firstgame.sprite.EnemyShip;
+import shein.firstgame.sprite.GameOver;
 import shein.firstgame.sprite.Star;
 import shein.firstgame.sprite.MainShip;
 import shein.firstgame.utils.EnemyEmitter;
@@ -30,6 +31,7 @@ public class GameScreen extends BaseScreen {
     private Texture img;
     private TextureAtlas atlas;
     private Backgroung bg;
+    private GameOver gameOver;
 
     private Star[] stars;
     private MainShip mainShip;
@@ -53,6 +55,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < STAR_COUNT; i++) {
             stars[i] = new Star(atlas);
         }
+        gameOver = new GameOver(atlas);
         bulletPool = new BulletPool();
         explosionPool = new ExplosionPool(atlas);
         enemyShipPool = new EnemyShipPool(worldBounds,explosionPool, bulletPool);
@@ -78,6 +81,7 @@ public class GameScreen extends BaseScreen {
             s.resize(worldBounds);
         }
         mainShip.resize(worldBounds);
+        gameOver.resize(worldBounds);
     }
 
     @Override
@@ -127,11 +131,13 @@ public class GameScreen extends BaseScreen {
         for (Star s: stars) {
             s.update(delta);
         }
-        mainShip.update(delta);
-        bulletPool.updateActiveSprites(delta);
-        enemyShipPool.updateActiveSprites(delta);
-        explosionPool.updateActiveSprites(delta);
-        enemyEmitter.generate(delta);
+        if(!mainShip.isDestroyed()) {
+            mainShip.update(delta);
+            bulletPool.updateActiveSprites(delta);
+            enemyShipPool.updateActiveSprites(delta);
+            explosionPool.updateActiveSprites(delta);
+            enemyEmitter.generate(delta);
+        }
     }
 
     private void checkCollisions(){
@@ -166,9 +172,9 @@ public class GameScreen extends BaseScreen {
     }
 
     private void freeAllDestroyed(){
-        bulletPool.freeAllDestroyedActiveSprite();
-        enemyShipPool.freeAllDestroyedActiveSprite();
-        explosionPool.freeAllDestroyedActiveSprite();
+            bulletPool.freeAllDestroyedActiveSprite();
+            enemyShipPool.freeAllDestroyedActiveSprite();
+            explosionPool.freeAllDestroyedActiveSprite();
     }
 
     private void draw(){
@@ -181,10 +187,12 @@ public class GameScreen extends BaseScreen {
         }
         if(!mainShip.isDestroyed()) {
             mainShip.draw(batch);
+            bulletPool.drawActiveSprites(batch);
+            enemyShipPool.drawActiveSprites(batch);
+            explosionPool.drawActiveSprites(batch);
+        } else {
+            gameOver.draw(batch);
         }
-        bulletPool.drawActiveSprites(batch);
-        enemyShipPool.drawActiveSprites(batch);
-        explosionPool.drawActiveSprites(batch);
         batch.end();
     }
 }
