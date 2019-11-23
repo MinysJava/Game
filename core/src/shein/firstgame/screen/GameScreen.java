@@ -12,6 +12,7 @@ import shein.firstgame.base.BaseScreen;
 import shein.firstgame.math.Rect;
 import shein.firstgame.pool.BulletPool;
 import shein.firstgame.pool.EnemyShipPool;
+import shein.firstgame.pool.ExplosionPool;
 import shein.firstgame.sprite.Backgroung;
 import shein.firstgame.sprite.Star;
 import shein.firstgame.sprite.MainShip;
@@ -20,23 +21,27 @@ import shein.firstgame.utils.EnemyEmitter;
 
 public class GameScreen extends BaseScreen {
 
+    private  static final int STAR_COUNT = 25;
+
     private Texture img;
     private TextureAtlas atlas;
     private Backgroung bg;
+
     private Star[] stars;
-    private int STAR_COUNT = 25;
     private MainShip mainShip;
 
     private BulletPool bulletPool;
     private EnemyShipPool enemyShipPool;
+    private ExplosionPool explosionPool;
+
     private EnemyEmitter enemyEmitter;
 
     private Music gameMusic;
 
-
     @Override
     public void show() {
         super.show();
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         img = new Texture("textures/bg.png");
         bg = new Backgroung(new TextureRegion(img));
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
@@ -44,14 +49,14 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < STAR_COUNT; i++) {
             stars[i] = new Star(atlas);
         }
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        bulletPool = new BulletPool();
+        explosionPool = new ExplosionPool(atlas);
+        enemyShipPool = new EnemyShipPool(worldBounds,explosionPool, bulletPool);
+        mainShip = new MainShip(atlas, bulletPool, explosionPool);
+        enemyEmitter = new EnemyEmitter(enemyShipPool, atlas, worldBounds);
         gameMusic.setVolume(0.7f);
         gameMusic.setLooping(true);
         gameMusic.play();
-        bulletPool = new BulletPool();
-        enemyShipPool = new EnemyShipPool(worldBounds, bulletPool);
-        mainShip = new MainShip(atlas, bulletPool);
-        enemyEmitter = new EnemyEmitter(enemyShipPool, atlas, worldBounds);
     }
 
     @Override
@@ -63,7 +68,6 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
         bg.resize(worldBounds);
         for (Star s: stars) {
             s.resize(worldBounds);
@@ -79,6 +83,7 @@ public class GameScreen extends BaseScreen {
         mainShip.dispose();
         bulletPool.dispose();
         enemyShipPool.dispose();
+        explosionPool.dispose();
         enemyEmitter.dispose();
         super.dispose();
     }
@@ -120,12 +125,14 @@ public class GameScreen extends BaseScreen {
         mainShip.update(delta);
         bulletPool.updateActiveSprites(delta);
         enemyShipPool.updateActiveSprites(delta);
+        explosionPool.updateActiveSprites(delta);
         enemyEmitter.generate(delta);
     }
 
     private void freeAllDestroyed(){
         bulletPool.freeAllDestroyedActiveSprite();
         enemyShipPool.freeAllDestroyedActiveSprite();
+        explosionPool.freeAllDestroyedActiveSprite();
     }
 
     private void draw(){
@@ -139,6 +146,7 @@ public class GameScreen extends BaseScreen {
         mainShip.draw(batch);
         bulletPool.drawActiveSprites(batch);
         enemyShipPool.drawActiveSprites(batch);
+        explosionPool.drawActiveSprites(batch);
         batch.end();
     }
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import shein.firstgame.base.Ship;
 import shein.firstgame.math.Rect;
 import shein.firstgame.pool.BulletPool;
+import shein.firstgame.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
 
@@ -16,8 +17,9 @@ public class EnemyShip extends Ship {
 
     private Vector2 descentV = new Vector2(0, -0.15f);
 
-    public EnemyShip(BulletPool bulletPool, Rect worldBounds) {
+    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
         this.v.set(v0);
     }

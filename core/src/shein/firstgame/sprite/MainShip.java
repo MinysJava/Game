@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import shein.firstgame.base.Ship;
 import shein.firstgame.math.Rect;
 import shein.firstgame.pool.BulletPool;
+import shein.firstgame.pool.ExplosionPool;
 
 public class MainShip extends Ship {
 
@@ -20,9 +21,10 @@ public class MainShip extends Ship {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         bulletRegion = atlas.findRegion("bulletMainShip");
         shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         v0.set(0.5f, 0);
@@ -48,7 +50,6 @@ public class MainShip extends Ship {
 
     @Override
     public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
         this.worldBounds = worldBounds;
         setHeightProportion(0.15f);
         setBottom(worldBounds.getBottom() + BOTTOM_MARGIN);

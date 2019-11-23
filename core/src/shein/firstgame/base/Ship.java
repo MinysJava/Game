@@ -6,7 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 
 import shein.firstgame.math.Rect;
 import shein.firstgame.pool.BulletPool;
+import shein.firstgame.pool.ExplosionPool;
 import shein.firstgame.sprite.Bullet;
+import shein.firstgame.sprite.Explosion;
 
 public abstract class Ship extends Sprite{
 
@@ -15,6 +17,7 @@ public abstract class Ship extends Sprite{
 
     protected Rect worldBounds;
     protected BulletPool bulletPool;
+    protected ExplosionPool explosionPool;
     protected TextureRegion bulletRegion;
     protected Vector2 bulletV = new Vector2();
     protected Sound shootSound;
@@ -25,6 +28,8 @@ public abstract class Ship extends Sprite{
 
     protected float reloadInterval = 0f;
     protected float reloadTimer = 0f;
+
+
 
     public Ship() {
     }
@@ -43,9 +48,20 @@ public abstract class Ship extends Sprite{
         pos.mulAdd(v, delta);
     }
 
+    @Override
+    public void destroy() {
+        boom();
+        super.destroy();
+    }
+
     protected void shoot(){
         shootSound.play(0.5f);
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
+    }
+
+    protected void boom() {
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(pos, getHeight());
     }
 }
