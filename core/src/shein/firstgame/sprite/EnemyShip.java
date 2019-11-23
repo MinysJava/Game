@@ -10,6 +10,12 @@ import shein.firstgame.pool.BulletPool;
 
 public class EnemyShip extends Ship {
 
+    private enum State { DESCENT, FIGHT}
+
+    private State state;
+
+    private Vector2 descentV = new Vector2(0, -0.15f);
+
     public EnemyShip(BulletPool bulletPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
         this.worldBounds = worldBounds;
@@ -19,8 +25,20 @@ public class EnemyShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
-        if (getBottom() < worldBounds.getBottom()) {
-            destroy();
+        switch (state){
+            case DESCENT:
+                reloadTimer = 0f;
+                if (getTop() <= worldBounds.getTop()){
+                    v.set(v0);
+                    state = State.FIGHT;
+                    reloadTimer = reloadInterval;
+                }
+                break;
+            case FIGHT:
+                if (getBottom() < worldBounds.getBottom()) {
+                    destroy();
+                }
+                break;
         }
     }
 
@@ -46,6 +64,7 @@ public class EnemyShip extends Ship {
         this.shootSound = shootSound;
         setHeightProportion(height);
         this.hp = hp;
-        this.v.set(v0);
+        this.v.set(descentV);
+        state = State.DESCENT;
     }
 }

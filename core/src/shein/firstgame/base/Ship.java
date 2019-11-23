@@ -19,8 +19,6 @@ public abstract class Ship extends Sprite{
     protected Vector2 bulletV = new Vector2();
     protected Sound shootSound;
 
-    private Vector2 beginV = new Vector2(0, -0.2f);
-
     protected float bulletHeight;
     protected int damage;
     protected int hp;
@@ -38,25 +36,16 @@ public abstract class Ship extends Sprite{
     @Override
     public void update(float delta) {
         reloadTimer += delta;
-        if(getTop() < worldBounds.getTop()) {
-            if (reloadTimer > reloadInterval) {
-                reloadTimer = 0f;
-                shoot();
-            }
-        } else {
-            reloadTimer = reloadInterval;
+        if (reloadTimer > reloadInterval) {
+            reloadTimer = 0f;
+            shoot();
         }
-        if(getTop() < worldBounds.getTop()) {
-            pos.mulAdd(v, delta);
-        } else {
-            pos.mulAdd(beginV, delta);
-        }
+        pos.mulAdd(v, delta);
     }
 
     protected void shoot(){
         shootSound.play(0.5f);
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
-
     }
 }
