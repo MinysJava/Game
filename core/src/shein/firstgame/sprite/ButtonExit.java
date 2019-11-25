@@ -10,13 +10,11 @@ public class ButtonExit extends ScaledTouchUpButton {
 
     public ButtonExit(TextureAtlas atlas) {
         super(atlas.findRegion("btExit"));
-
     }
 
     @Override
     public void action() {
         Gdx.app.exit();
-
     }
 
     @Override

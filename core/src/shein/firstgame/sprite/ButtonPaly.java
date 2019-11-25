@@ -19,8 +19,6 @@ public class ButtonPaly extends ScaledTouchUpButton {
     @Override
     public void action() {
         game.setScreen(new  GameScreen());
-
-
     }
 
     @Override

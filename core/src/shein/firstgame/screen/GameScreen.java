@@ -18,11 +18,12 @@ import shein.firstgame.pool.ExplosionPool;
 import shein.firstgame.sprite.Backgroung;
 import shein.firstgame.sprite.Bullet;
 import shein.firstgame.sprite.EnemyShip;
+import shein.firstgame.sprite.Explosion;
 import shein.firstgame.sprite.GameOver;
+import shein.firstgame.sprite.NewGameButton;
 import shein.firstgame.sprite.Star;
 import shein.firstgame.sprite.MainShip;
 import shein.firstgame.utils.EnemyEmitter;
-
 
 public class GameScreen extends BaseScreen {
 
@@ -34,7 +35,7 @@ public class GameScreen extends BaseScreen {
     private GameOver gameOver;
 
     private Star[] stars;
-    private MainShip mainShip;
+    protected MainShip mainShip;
 
     private BulletPool bulletPool;
     private EnemyShipPool enemyShipPool;
@@ -43,6 +44,8 @@ public class GameScreen extends BaseScreen {
     private EnemyEmitter enemyEmitter;
 
     private Music gameMusic;
+
+    private NewGameButton newGameButton;
 
     @Override
     public void show() {
@@ -56,10 +59,12 @@ public class GameScreen extends BaseScreen {
             stars[i] = new Star(atlas);
         }
         gameOver = new GameOver(atlas);
+
         bulletPool = new BulletPool();
         explosionPool = new ExplosionPool(atlas);
         enemyShipPool = new EnemyShipPool(worldBounds,explosionPool, bulletPool);
         mainShip = new MainShip(atlas, bulletPool, explosionPool);
+        newGameButton = new NewGameButton(atlas, mainShip);
         enemyEmitter = new EnemyEmitter(enemyShipPool, atlas, worldBounds);
         gameMusic.setVolume(0.7f);
         gameMusic.setLooping(true);
@@ -82,6 +87,7 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.resize(worldBounds);
         gameOver.resize(worldBounds);
+        newGameButton.resize(worldBounds);
     }
 
     @Override
@@ -112,18 +118,19 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 target, int pointer) {
         mainShip.touchDown(target, pointer);
+        newGameButton.touchDown(target, pointer);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 target, int pointer) {
         mainShip.touchUp(target, pointer);
+        newGameButton.touchUp(target, pointer);
         return false;
     }
 
     @Override
     public boolean touchDragged(Vector2 target, int pointer) {
-        mainShip.touchDragged(target, pointer);
         return false;
     }
 
@@ -156,7 +163,6 @@ public class GameScreen extends BaseScreen {
                 if(enemyShip.isBulletCollisoin(bullet)){
                     enemyShip.damage(bullet.getDamage());
                     bullet.destroy();
-
                 }
             }
         }
@@ -172,9 +178,20 @@ public class GameScreen extends BaseScreen {
     }
 
     private void freeAllDestroyed(){
-            bulletPool.freeAllDestroyedActiveSprite();
-            enemyShipPool.freeAllDestroyedActiveSprite();
-            explosionPool.freeAllDestroyedActiveSprite();
+        bulletPool.freeAllDestroyedActiveSprite();
+        enemyShipPool.freeAllDestroyedActiveSprite();
+        explosionPool.freeAllDestroyedActiveSprite();
+        if(mainShip.isDestroyed()) {
+            for (EnemyShip enemyShip: enemyShipPool.getActiveObjects()) {
+                enemyShip.destroy();
+            }
+            for (Bullet bullet: bulletPool.getActiveObjects()) {
+                bullet.destroy();
+            }
+            for (Explosion explosion: explosionPool.getActiveObjects()) {
+                explosion.destroy();
+            }
+        }
     }
 
     private void draw(){
@@ -192,6 +209,7 @@ public class GameScreen extends BaseScreen {
             explosionPool.drawActiveSprites(batch);
         } else {
             gameOver.draw(batch);
+            newGameButton.draw(batch);
         }
         batch.end();
     }
