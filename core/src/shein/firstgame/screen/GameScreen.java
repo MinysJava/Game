@@ -40,6 +40,8 @@ public class GameScreen extends BaseScreen {
     private BulletPool bulletPool;
     private EnemyShipPool enemyShipPool;
     private ExplosionPool explosionPool;
+    private float animateTimer = 0f;
+    private float endTimer = 0.75f;
 
     private EnemyEmitter enemyEmitter;
 
@@ -138,7 +140,12 @@ public class GameScreen extends BaseScreen {
         for (Star s: stars) {
             s.update(delta);
         }
-        if(!mainShip.isDestroyed()) {
+        if(mainShip.isDestroyed()) {
+            animateTimer += delta;
+        } else {
+            animateTimer = 0f;
+        }
+        if(animateTimer <= endTimer) {
             mainShip.update(delta);
             bulletPool.updateActiveSprites(delta);
             enemyShipPool.updateActiveSprites(delta);
@@ -181,7 +188,7 @@ public class GameScreen extends BaseScreen {
         bulletPool.freeAllDestroyedActiveSprite();
         enemyShipPool.freeAllDestroyedActiveSprite();
         explosionPool.freeAllDestroyedActiveSprite();
-        if(mainShip.isDestroyed()) {
+        if(animateTimer >= endTimer) {
             for (EnemyShip enemyShip: enemyShipPool.getActiveObjects()) {
                 enemyShip.destroy();
             }
@@ -202,7 +209,7 @@ public class GameScreen extends BaseScreen {
         for (Star s: stars) {
             s.draw(batch);
         }
-        if(!mainShip.isDestroyed()) {
+        if(animateTimer <= endTimer) {
             mainShip.draw(batch);
             bulletPool.drawActiveSprites(batch);
             enemyShipPool.drawActiveSprites(batch);
