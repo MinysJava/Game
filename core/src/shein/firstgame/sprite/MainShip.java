@@ -34,7 +34,6 @@ public class MainShip extends Ship {
         damage = 1;
         hp = HP;
         bulletV.set(0, 0.5f);
-
     }
 
     public void startNewGame(Rect worldBounds){
