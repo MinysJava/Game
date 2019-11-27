@@ -18,6 +18,7 @@ import shein.firstgame.pool.ExplosionPool;
 import shein.firstgame.sprite.Backgroung;
 import shein.firstgame.sprite.Bullet;
 import shein.firstgame.sprite.EnemyShip;
+import shein.firstgame.sprite.GameOver;
 import shein.firstgame.sprite.Star;
 import shein.firstgame.sprite.MainShip;
 import shein.firstgame.utils.EnemyEmitter;
@@ -26,6 +27,10 @@ import shein.firstgame.utils.EnemyEmitter;
 public class GameScreen extends BaseScreen {
 
     private  static final int STAR_COUNT = 25;
+
+    private enum State {PLAYING, PAUSE, GAMW_OVER}
+
+    private State state;
 
     private Texture img;
     private TextureAtlas atlas;
@@ -41,6 +46,8 @@ public class GameScreen extends BaseScreen {
     private EnemyEmitter enemyEmitter;
 
     private Music gameMusic;
+
+    private GameOver gameOver;
 
     @Override
     public void show() {
@@ -58,9 +65,11 @@ public class GameScreen extends BaseScreen {
         enemyShipPool = new EnemyShipPool(worldBounds,explosionPool, bulletPool);
         mainShip = new MainShip(atlas, bulletPool, explosionPool);
         enemyEmitter = new EnemyEmitter(enemyShipPool, atlas, worldBounds);
+        gameOver = new GameOver(atlas);
         gameMusic.setVolume(0.7f);
         gameMusic.setLooping(true);
         gameMusic.play();
+        state = State.PLAYING;
     }
 
     @Override
@@ -78,6 +87,7 @@ public class GameScreen extends BaseScreen {
             s.resize(worldBounds);
         }
         mainShip.resize(worldBounds);
+        gameOver.resize(worldBounds);
     }
 
     @Override
@@ -127,14 +137,19 @@ public class GameScreen extends BaseScreen {
         for (Star s: stars) {
             s.update(delta);
         }
-        mainShip.update(delta);
-        bulletPool.updateActiveSprites(delta);
-        enemyShipPool.updateActiveSprites(delta);
         explosionPool.updateActiveSprites(delta);
-        enemyEmitter.generate(delta);
+        if(state == State.PLAYING){
+            mainShip.update(delta);
+            bulletPool.updateActiveSprites(delta);
+            enemyShipPool.updateActiveSprites(delta);
+            enemyEmitter.generate(delta);
+        }
     }
 
     private void checkCollisions(){
+        if(state != State.PLAYING){
+            return;
+        }
         List<EnemyShip> enemyShipList = enemyShipPool.getActiveObjects();
         List<Bullet> bulletList = bulletPool.getActiveObjects();
         for (EnemyShip enemyShip: enemyShipList) {
@@ -142,6 +157,9 @@ public class GameScreen extends BaseScreen {
             if(mainShip.pos.dst(enemyShip.pos) < minDistShip){
                 mainShip.damage(enemyShip.getDamage());
                 enemyShip.destroy();
+                if(mainShip.isDestroyed()){
+                    state = State.GAMW_OVER;
+                }
             }
             for (Bullet bullet: bulletList) {
                 if(bullet.getOwner() != mainShip){
@@ -150,7 +168,6 @@ public class GameScreen extends BaseScreen {
                 if(enemyShip.isBulletCollisoin(bullet)){
                     enemyShip.damage(bullet.getDamage());
                     bullet.destroy();
-
                 }
             }
         }
@@ -161,6 +178,9 @@ public class GameScreen extends BaseScreen {
             if(mainShip.isBulletCollisoin(bullet)){
                 mainShip.damage(bullet.getDamage());
                 bullet.destroy();
+                if(mainShip.isDestroyed()){
+                    state = State.GAMW_OVER;
+                }
             }
         }
     }
@@ -179,12 +199,25 @@ public class GameScreen extends BaseScreen {
         for (Star s: stars) {
             s.draw(batch);
         }
-        if(!mainShip.isDestroyed()) {
-            mainShip.draw(batch);
-        }
-        bulletPool.drawActiveSprites(batch);
-        enemyShipPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);
+        if(state == State.PLAYING) {
+            mainShip.draw(batch);
+            bulletPool.drawActiveSprites(batch);
+            enemyShipPool.drawActiveSprites(batch);
+        } else if(state == State.GAMW_OVER ){
+            gameOver.draw(batch);
+        }
         batch.end();
+    }
+
+    private void startNewGame(){
+        state = State.PLAYING;
+
+        mainShip.startNewGame(worldBounds);
+
+        bulletPool.freeAllActiveSprite();
+        enemyShipPool.freeAllActiveSprite();
+        explosionPool.freeAllActiveSprite();
+
     }
 }

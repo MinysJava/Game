@@ -16,7 +16,6 @@ public class Sprite extends Rect {
     protected boolean destroyed;
 
     public Sprite(){
-
     }
 
     public Sprite(TextureRegion region) {
