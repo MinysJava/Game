@@ -44,7 +44,7 @@ public class MainShip extends Ship {
         rightPointer = INVALID_POINTER;
         stop();
         hp = HP;
-        pos.set(worldBounds.pos);
+        pos.x = worldBounds.pos.x;
     }
 
     @Override

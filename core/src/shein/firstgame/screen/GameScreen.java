@@ -21,6 +21,7 @@ import shein.firstgame.sprite.EnemyShip;
 import shein.firstgame.sprite.GameOver;
 import shein.firstgame.sprite.Star;
 import shein.firstgame.sprite.MainShip;
+import shein.firstgame.sprite.StartNewGame;
 import shein.firstgame.utils.EnemyEmitter;
 
 
@@ -48,6 +49,7 @@ public class GameScreen extends BaseScreen {
     private Music gameMusic;
 
     private GameOver gameOver;
+    private StartNewGame startNewGame;
 
     @Override
     public void show() {
@@ -66,10 +68,19 @@ public class GameScreen extends BaseScreen {
         mainShip = new MainShip(atlas, bulletPool, explosionPool);
         enemyEmitter = new EnemyEmitter(enemyShipPool, atlas, worldBounds);
         gameOver = new GameOver(atlas);
+        startNewGame = new StartNewGame(atlas, this);
         gameMusic.setVolume(0.7f);
         gameMusic.setLooping(true);
         gameMusic.play();
         state = State.PLAYING;
+    }
+
+    public void startNewGame(){
+        state = State.PLAYING;
+        mainShip.startNewGame(worldBounds);
+        bulletPool.freeAllActiveSprite();
+        enemyShipPool.freeAllActiveSprite();
+        explosionPool.freeAllActiveSprite();
     }
 
     @Override
@@ -88,6 +99,7 @@ public class GameScreen extends BaseScreen {
         }
         mainShip.resize(worldBounds);
         gameOver.resize(worldBounds);
+        startNewGame.resize(worldBounds);
     }
 
     @Override
@@ -117,13 +129,21 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 target, int pointer) {
-        mainShip.touchDown(target, pointer);
+        if( state == State.PLAYING) {
+            mainShip.touchDown(target, pointer);
+        } else if(state == State.GAMW_OVER) {
+            startNewGame.touchDown(target, pointer);
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 target, int pointer) {
-        mainShip.touchUp(target, pointer);
+        if( state == State.PLAYING) {
+            mainShip.touchUp(target, pointer);
+        } else if(state == State.GAMW_OVER) {
+            startNewGame.touchUp(target, pointer);
+        }
         return false;
     }
 
@@ -206,18 +226,8 @@ public class GameScreen extends BaseScreen {
             enemyShipPool.drawActiveSprites(batch);
         } else if(state == State.GAMW_OVER ){
             gameOver.draw(batch);
+            startNewGame.draw(batch);
         }
         batch.end();
-    }
-
-    private void startNewGame(){
-        state = State.PLAYING;
-
-        mainShip.startNewGame(worldBounds);
-
-        bulletPool.freeAllActiveSprite();
-        enemyShipPool.freeAllActiveSprite();
-        explosionPool.freeAllActiveSprite();
-
     }
 }
