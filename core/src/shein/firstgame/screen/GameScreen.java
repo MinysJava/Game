@@ -63,6 +63,7 @@ public class GameScreen extends BaseScreen {
     private StringBuilder sbLevel;
 
     private int frags;
+    private int prevLevel = 1;
 
     @Override
     public void show() {
@@ -98,6 +99,7 @@ public class GameScreen extends BaseScreen {
         state = State.PLAYING;
 
         frags = 0;
+        prevLevel = 1;
         mainShip.startNewGame(worldBounds);
 
         bulletPool.freeAllActiveSprite();
@@ -198,6 +200,10 @@ public class GameScreen extends BaseScreen {
             bulletPool.updateActiveSprites(delta);
             enemyShipPool.updateActiveSprites(delta);
             enemyEmitter.generate(delta, frags);
+        }
+        if(prevLevel < enemyEmitter.getLevel()){
+            prevLevel = enemyEmitter.getLevel();
+            mainShip.setHp(mainShip.getHp() + 10);
         }
     }
 

@@ -14,13 +14,15 @@ public class MainShip extends Ship {
 
     private static final float BOTTOM_MARGIN = 0.03f;
     private static final int INVALID_POINTER = -1;
-    private static final int HP = 1;
+    private static final int HP = 10;
 
     private boolean pressedLeft;
     private boolean pressedRight;
 
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
+
+    private int prevLevel = 1;
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
@@ -46,7 +48,6 @@ public class MainShip extends Ship {
         pos.x = worldBounds.pos.x;
     }
 
-    @Override
     public void update(float delta) {
         super.update(delta);
         if (getRight() > worldBounds.getRight()) {
