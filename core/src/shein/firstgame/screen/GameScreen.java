@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class GameScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 25;
     private static final String FRAGS = "Frags:";
+    private static final String HP = "HP:";
+    private static final String LEVEL = "Level:";
 
     private enum State {PLAYING, PAUSE, GAME_OVER}
 
@@ -56,6 +59,8 @@ public class GameScreen extends BaseScreen {
 
     private Font font;
     private StringBuilder sbFrags;
+    private StringBuilder sbHp;
+    private StringBuilder sbLevel;
 
     private int frags;
 
@@ -80,6 +85,8 @@ public class GameScreen extends BaseScreen {
         font = new Font("font/font.fnt", "font/font.png");
         font.setSize(0.02f);
         sbFrags = new StringBuilder();
+        sbHp = new StringBuilder();
+        sbLevel = new StringBuilder();
         gameMusic.setVolume(0.7f);
         gameMusic.setLooping(true);
         gameMusic.play();
@@ -269,5 +276,13 @@ public class GameScreen extends BaseScreen {
         float fragsPosX = worldBounds.getLeft() + 0.01f;
         float fragsPosY = worldBounds.getTop() - 0.01f;
         font.draw(batch, sbFrags.append(FRAGS).append(frags), fragsPosX, fragsPosY);
+        sbHp.setLength(0);
+        float hpPosX = worldBounds.pos.x ;
+        float hpPosY = worldBounds.getTop() - 0.01f;
+        font.draw(batch, sbHp.append(HP).append(mainShip.getHp()), hpPosX, hpPosY, Align.center);
+        sbLevel.setLength(0);
+        float levelPosX = worldBounds.getRight() - 0.01f;
+        float levelPosY = worldBounds.getTop() - 0.01f;
+        font.draw(batch, sbLevel.append(LEVEL).append(1), levelPosX, levelPosY, Align.right);
     }
 }
