@@ -34,7 +34,9 @@ public class EnemyEmitter {
     private static final float BIG_HEIGHT = 0.2f;
     private static final int BIG_HP = 10;
 
-    private float generateInterval = 4f;
+    private static final float GENERATE_INTERVAL = 4f;
+
+    private float generateInterval = GENERATE_INTERVAL;
     private float generateTimer;
 
     private EnemyShipPool enemyShipPool;
@@ -49,6 +51,8 @@ public class EnemyEmitter {
     private Vector2 enemyMiddleV = new Vector2(0, -0.03f);
     private Vector2 enemyBigV = new Vector2(0, -0.005f);
 
+    private int level = 1;
+
     private Sound shootSound;
 
     public EnemyEmitter(EnemyShipPool enemyShipPool, TextureAtlas atlas, Rect worldBounds) {
@@ -61,7 +65,9 @@ public class EnemyEmitter {
         shootSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
     }
 
-    public void generate(float delta) {
+    public void generate(float delta,int frags) {
+        level = frags / 10 + 1;
+        generateInterval = GENERATE_INTERVAL / level ;
         generateTimer += delta;
         if (generateTimer >= generateInterval) {
             generateTimer = 0f;
@@ -114,5 +120,13 @@ public class EnemyEmitter {
 
     public void dispose() {
         shootSound.dispose();
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

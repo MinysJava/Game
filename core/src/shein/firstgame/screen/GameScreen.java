@@ -197,7 +197,7 @@ public class GameScreen extends BaseScreen {
             mainShip.update(delta);
             bulletPool.updateActiveSprites(delta);
             enemyShipPool.updateActiveSprites(delta);
-            enemyEmitter.generate(delta);
+            enemyEmitter.generate(delta, frags);
         }
     }
 
@@ -283,6 +283,6 @@ public class GameScreen extends BaseScreen {
         sbLevel.setLength(0);
         float levelPosX = worldBounds.getRight() - 0.01f;
         float levelPosY = worldBounds.getTop() - 0.01f;
-        font.draw(batch, sbLevel.append(LEVEL).append(1), levelPosX, levelPosY, Align.right);
+        font.draw(batch, sbLevel.append(LEVEL).append(enemyEmitter.getLevel()), levelPosX, levelPosY, Align.right);
     }
 }
